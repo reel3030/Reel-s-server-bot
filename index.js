@@ -17,6 +17,14 @@ client.once("clientReady", () => {
   console.log(`Bot ready: ${client.user.tag}`);
 });
 
+
+client.on("guildMemberAdd", async member => {
+      setTimeout(async () => {
+    const freshMember = await member.guild.members.fetch(member.id);
+  }, 1000 * 60 * 60 * 24 * 3);
+});
+
+
 client.on("guildMemberAdd", async member => {
 
   console.log(`${member.user.tag} が参加しました`);
