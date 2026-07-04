@@ -43,7 +43,7 @@ client.once("clientReady", async () => {
 
       try {
         await member.send(
-          "3日以内に認証ロールが付与されなかったため、サーバーから退出となりました。\n https://discord.gg/jvTCSCbyYe こちらから再参加が可能です。"
+          "3日以内に認証ロールが付与されなかったため、サーバーから退出となりました。\n dsc.gg/reel-server こちらから再参加が可能です。"
         );
       } catch {
         console.log(`${member.user.tag} にDMを送信できませんでした。`);
