@@ -43,14 +43,14 @@ client.once("clientReady", async () => {
 
       try {
         await member.send(
-          "3日以内に認証ロールが付与されなかったため、サーバーから退出となりました。\n再参加をご希望の場合は、管理者までご連絡ください。"
+          "3日以内に認証ロールが付与されなかったため、サーバーから退出となりました。\n https://discord.gg/jvTCSCbyYe こちらから再参加が可能です。"
         );
       } catch {
         console.log(`${member.user.tag} にDMを送信できませんでした。`);
       }
 
       await member.kick(
-        "3日以内に認証ロールが付与されなかったため"
+        "3日以内に認証ロールが付与されなかったため botによりkickされました。"
       );
 
       console.log(`${member.user.tag} をKickしました。`);
@@ -81,7 +81,7 @@ client.on("guildMemberAdd", async member => {
 
       try {
         await freshMember.send(
-          "3日以内に認証ロールが付与されなかったため、サーバーから退出となりました。\n再参加をご希望の場合は、管理者までご連絡ください。"
+          "3日以内に認証ロールが付与されなかったため、サーバーから退出となりました。"
         );
       } catch {
         console.log(`${freshMember.user.tag} にDMを送信できませんでした。`);
