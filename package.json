@@ -1,0 +1,16 @@
+{
+  "name": "role-kick-bot-Reel-s-server",
+  "version": "1.0.0",
+  "description": "Discord Role Kick Bot for Reel's Server",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.21.0",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
+  }
+}
