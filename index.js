@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import {
   Client,
@@ -13,24 +16,90 @@ const client = new Client({
   ]
 });
 
-client.once("clientReady", () => {
+client.once("clientReady", async () => {
+
   console.log(`Bot ready: ${client.user.tag}`);
+
+  const guild = await client.guilds.fetch(process.env.GUILD_ID);
+  await guild.members.fetch();
+
+  const threeDays = 1000 * 60 * 60 * 24 * 3;
+
+  for (const member of guild.members.cache.values()) {
+
+    try {
+
+      if (member.user.bot) continue;
+
+      if (!member.joinedAt) continue;
+
+      if (Date.now() - member.joinedAt.getTime() < threeDays) {
+        continue;
+      }
+
+      if (member.roles.cache.has(process.env.TARGET_ROLE_ID)) {
+        continue;
+      }
+
+      try {
+        await member.send(
+          "3日以内に認証ロールが付与されなかったため、サーバーから退出となりました。\n再参加をご希望の場合は、管理者までご連絡ください。"
+        );
+      } catch {
+        console.log(`${member.user.tag} にDMを送信できませんでした。`);
+      }
+
+      await member.kick(
+        "3日以内に認証ロールが付与されなかったため"
+      );
+
+      console.log(`${member.user.tag} をKickしました。`);
+
+    } catch (err) {
+      console.error(`${member.user.tag} の処理中にエラー:`, err);
+    }
+
+  }
+
 });
-
-
-client.on("guildMemberAdd", async member => {
-      setTimeout(async () => {
-    const freshMember = await member.guild.members.fetch(member.id);
-  }, 1000 * 60 * 60 * 24 * 3);
-});
-
 
 client.on("guildMemberAdd", async member => {
 
   console.log(`${member.user.tag} が参加しました`);
 
-});
+  const threeDays = 1000 * 60 * 60 * 24 * 3;
 
+  setTimeout(async () => {
+
+    try {
+
+      const freshMember = await member.guild.members.fetch(member.id);
+
+      if (freshMember.roles.cache.has(process.env.TARGET_ROLE_ID)) {
+        return;
+      }
+
+      try {
+        await freshMember.send(
+          "3日以内に認証ロールが付与されなかったため、サーバーから退出となりました。\n再参加をご希望の場合は、管理者までご連絡ください。"
+        );
+      } catch {
+        console.log(`${freshMember.user.tag} にDMを送信できませんでした。`);
+      }
+
+      await freshMember.kick(
+        "3日以内に認証ロールが付与されなかったため"
+      );
+
+      console.log(`${freshMember.user.tag} をKickしました。`);
+
+    } catch (err) {
+      console.error(`${member.user.tag} の確認中にエラー:`, err);
+    }
+
+  }, threeDays);
+
+});
 
 client.login(process.env.TOKEN);
 
