@@ -20,6 +20,23 @@ client.once("clientReady", async () => {
 
   console.log(`Bot ready: ${client.user.tag}`);
 
+  
+const CHANNEL_ID = process.env.SENDINFO;
+const MESSAGE_TEXT = `サーバー作成日 | <t:1766712360:f>
+サーバー招待URL | https://discord.gg/nFaZAqzqGM https://dsc.gg/reel-server`;
+
+if (CHANNEL_ID) {
+    client.channels.fetch(CHANNEL_ID)
+        .then(channel => {
+            if (channel) channel.send(MESSAGE_TEXT).then(() => console.log('メッセージを送信しました。'));
+        })
+        .catch(console.error);
+} else {
+    console.error('環境変数 SENDINFO が設定されていません。');
+}
+
+
+
   const guild = await client.guilds.fetch(process.env.GUILD_ID);
   await guild.members.fetch();
 
