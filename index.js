@@ -33,7 +33,7 @@ if (CHANNEL_ID) {
                     title: 'サーバー情報 / Server Info',
                     color: 0xE67E22, // Discord標準のオレンジ色
                     description: `**サーバー作成日** | <t:1766712360:f>\n**サーバー招待URL** | https://discord.gg/nFaZAqzqGM https://dsc.gg/reel-server`,
-                    timestamp: new Date().toISOString()
+                    
                 };
 
                 channel.send({ embeds: [embed] })
