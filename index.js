@@ -12,7 +12,9 @@ const app = express();
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMembers
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
   ]
 });
 
@@ -103,6 +105,31 @@ client.on("guildMemberAdd", async member => {
   }, threeDays);
 
 });
+
+client.on("messageCreate", async message => {
+  if (message.author.bot) return;
+
+  if (message.content !== "rsbot!verify") return;
+  if (!message.member.roles.cache.has(process.env.VERIFY_MANAGER_ROLE_ID)) {
+    return;
+    const embed = new EmbedBuilder()
+      .setTitle("認証")
+      .setDescription(
+        "認証をすると、<@&1467451539722342552>が付与され、サーバーで喋れるようになります。"
+      )
+      .setColor("Green");
+    const button = new ButtonBuilder()
+      .setCustomId("verify")
+      .setLabel("認証する")
+      .setStyle(ButtonStyle.Success);
+    const row = new ActionRowBuilder().addComponents(button);
+    await message.channel.send({
+      embeds: [embed],
+      components: [row]
+    });
+  }
+});
+
 
 client.login(process.env.TOKEN);
 
