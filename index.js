@@ -137,7 +137,7 @@ client.on("messageCreate", async message => {
     components: [row]
   });
 }
-});
+);
 
 
 client.login(process.env.TOKEN);
