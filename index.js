@@ -132,7 +132,46 @@ client.on("interactionCreate", async (interaction) => {
 
   if (interaction.customId !== "verify") return;
   const answer = crypto.randomBytes(3).toString("hex").toUpperCase();
-  const captcha = new Captcha();
+  client.on("interactionCreate", async (interaction) => {
+    if (!interaction.isButton()) return;
+
+    if (interaction.customId !== "verify") return;
+
+    const answer = crypto.randomBytes(3).toString("hex").toUpperCase();
+
+    const captcha = new Captcha({
+      text: answer,
+    });
+
+    captcha.async = true;
+    captcha.width = 300;
+    captcha.height = 100;
+
+    captcha.addDecoy();
+    captcha.drawTrace();
+
+    const buffer = await captcha.png;
+
+    const attachment = new AttachmentBuilder(buffer, {
+      name: "captcha.png",
+    });
+
+    const answerButton = new ButtonBuilder()
+      .setCustomId("captcha_answer")
+      .setLabel("回答する")
+      .setStyle(ButtonStyle.Primary);
+
+    const answerRow = new ActionRowBuilder().addComponents(answerButton);
+
+    captchas.set(interaction.user.id, answer);
+
+    await interaction.reply({
+      content: "画像に表示されている文字を入力してください。",
+      files: [attachment],
+      components: [answerRow],
+      ephemeral: true,
+    });
+  });
 
   captcha.async = true;
   captcha.width = 300;
@@ -141,7 +180,6 @@ client.on("interactionCreate", async (interaction) => {
   captcha.addDecoy();
   captcha.drawTrace();
 
-  await captcha.addText(answer);
   const buffer = await captcha.png;
   const attachment = new AttachmentBuilder(buffer, {
     name: "captcha.png",
