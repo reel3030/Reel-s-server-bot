@@ -111,7 +111,7 @@ client.on("messageCreate", async (message) => {
   }
 
   const embed = new EmbedBuilder()
-    .setTitle("認証")
+    .setTitle("認証/verify")
     .setDescription(
       "認証をすると、<@&1467451539722342552>が付与され、サーバーで喋れるようになります。",
     )
@@ -119,7 +119,7 @@ client.on("messageCreate", async (message) => {
 
   const button = new ButtonBuilder()
     .setCustomId("verify")
-    .setLabel("認証する")
+    .setLabel("認証する/verify")
     .setStyle(ButtonStyle.Success);
 
   const row = new ActionRowBuilder().addComponents(button);
