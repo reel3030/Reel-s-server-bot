@@ -141,7 +141,7 @@ client.on("interactionCreate", async (interaction) => {
 
     if (!captchaData) {
       await interaction.reply({
-        content: "認証情報がありません。もう一度やり直してください。",
+        content: "認証情報がありません。もう一度やり直してください。/pleaae retry.",
         ephemeral: true,
       });
       return;
@@ -163,7 +163,7 @@ client.on("interactionCreate", async (interaction) => {
 
     await interaction.reply({
 
-      content: "認証成功しました！",
+      content: "認証成功しました！/you are verified",
       ephemeral: true,
     });
 
@@ -181,7 +181,7 @@ client.on("interactionCreate", async (interaction) => {
 
       const input = new TextInputBuilder()
         .setCustomId("captcha_input")
-        .setLabel("画像の文字を入力してください")
+        .setLabel("画像の文字を入力してください/please type image sentence")
         .setStyle(TextInputStyle.Short);
 
       const row = new ActionRowBuilder()
@@ -200,7 +200,7 @@ client.on("interactionCreate", async (interaction) => {
 
     if (member.roles.cache.has(process.env.TARGET_ROLE_ID)) {
       await interaction.reply({
-        content: "あなたは既に認証済みです。 / you are already verified.",
+        content: "あなたは既に認証済みです。/you are already verified.",
         ephemeral: true,
       });
       return;
