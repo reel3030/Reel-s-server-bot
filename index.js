@@ -12,6 +12,9 @@ import {
   ButtonStyle,
   ActionRowBuilder,
   AttachmentBuilder,
+  ModalBuilder,
+TextInputBuilder,
+TextInputStyle,
 } from "discord.js";
 const captchas = new Map();
 const app = express();
@@ -131,49 +134,18 @@ client.on("interactionCreate", async (interaction) => {
   if (!interaction.isButton()) return;
 
   if (interaction.customId !== "verify") return;
-  const answer = crypto.randomBytes(3).toString("hex").toUpperCase();
 
-  client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isButton()) return;
+  await interaction.deferReply({
+    ephemeral: true,
+  });
 
-    if (interaction.customId !== "verify") return;
+  const answer = crypto.randomBytes(3)
+    .toString("hex")
+    .toUpperCase();
 
-    await interaction.deferReply({
-      ephemeral: true,
-    });
-    const answer = crypto.randomBytes(3).toString("hex").toUpperCase();
 
-    const captcha = new Captcha({
-      text: answer,
-    });
-
-    captcha.async = true;
-    captcha.width = 300;
-    captcha.height = 100;
-
-    captcha.addDecoy();
-    captcha.drawTrace();
-
-    const buffer = await captcha.png;
-
-    const attachment = new AttachmentBuilder(buffer, {
-      name: "captcha.png",
-    });
-
-    const answerButton = new ButtonBuilder()
-      .setCustomId("captcha_answer")
-      .setLabel("回答する")
-      .setStyle(ButtonStyle.Primary);
-
-    const answerRow = new ActionRowBuilder().addComponents(answerButton);
-
-    captchas.set(interaction.user.id, answer);
-
-    await interaction.editReply({
-      content: "画像に表示されている文字を入力してください。",
-      files: [attachment],
-      components: [answerRow],
-    });
+  const captcha = new Captcha({
+    text: answer,
   });
 
   captcha.async = true;
@@ -183,26 +155,34 @@ client.on("interactionCreate", async (interaction) => {
   captcha.addDecoy();
   captcha.drawTrace();
 
+
   const buffer = await captcha.png;
+
+
   const attachment = new AttachmentBuilder(buffer, {
     name: "captcha.png",
   });
+
 
   const answerButton = new ButtonBuilder()
     .setCustomId("captcha_answer")
     .setLabel("回答する")
     .setStyle(ButtonStyle.Primary);
 
-  const answerRow = new ActionRowBuilder().addComponents(answerButton);
+
+  const answerRow = new ActionRowBuilder()
+    .addComponents(answerButton);
+
 
   captchas.set(interaction.user.id, answer);
 
-  await interaction.reply({
+
+  await interaction.editReply({
     content: "画像に表示されている文字を入力してください。",
     files: [attachment],
     components: [answerRow],
-    ephemeral: true,
   });
+
 });
 
 client.login(process.env.TOKEN);
