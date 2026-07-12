@@ -140,20 +140,20 @@ client.on("interactionCreate", async (interaction) => {
   const attachment = new AttachmentBuilder(buffer, {
     name: "captcha.png",
   });
-});
 
-const answerButton = new ButtonBuilder()
-  .setCustomId("captcha_answer")
-  .setLabel("回答する")
-  .setStyle(ButtonStyle.Primary);
+  const answerButton = new ButtonBuilder()
+    .setCustomId("captcha_answer")
+    .setLabel("回答する")
+    .setStyle(ButtonStyle.Primary);
 
-const answerRow = new ActionRowBuilder().addComponents(answerButton);
-captchas.set(interaction.user.id, answer);
-await interaction.reply({
-  content: "画像に表示されている文字を入力してください。",
-  files: [attachment],
-  components: [answerRow],
-  ephemeral: true,
+  const answerRow = new ActionRowBuilder().addComponents(answerButton);
+  captchas.set(interaction.user.id, answer);
+  await interaction.reply({
+    content: "画像に表示されている文字を入力してください。",
+    files: [attachment],
+    components: [answerRow],
+    ephemeral: true,
+  });
 });
 
 client.login(process.env.TOKEN);
