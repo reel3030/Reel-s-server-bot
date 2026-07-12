@@ -131,6 +131,40 @@ client.on("messageCreate", async (message) => {
 });
 
 client.on("interactionCreate", async (interaction) => {
+
+  if (interaction.isModalSubmit()) {
+    if (interaction.customId !== "captcha_modal") return;
+
+    const answer = interaction.fields.getTextInputValue("captcha_input");
+
+    const correctAnswer = captchas.get(interaction.user.id);
+
+    if (!correctAnswer) {
+      await interaction.reply({
+        content: "認証情報がありません。もう一度やり直してください。",
+        ephemeral: true,
+      });
+      return;
+    }
+
+    if (answer.toUpperCase() !== correctAnswer) {
+      await interaction.reply({
+        content: "文字が違います。",
+        ephemeral: true,
+      });
+      return;
+    }
+
+    await interaction.reply({
+      content: "認証成功しました！",
+      ephemeral: true,
+    });
+
+    captchas.delete(interaction.user.id);
+    return;
+  }
+
+
   if (interaction.isButton()) {
 
     if (interaction.customId === "captcha_answer") {
