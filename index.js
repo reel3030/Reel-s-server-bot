@@ -155,8 +155,6 @@ client.on("interactionCreate", async (interaction) => {
   // captcha.addDecoy({ total: 20 });
 
   const buffer = await captcha.png;
-
-  const buffer = await captcha.png;
   console.log(buffer.length);
   const attachment = new AttachmentBuilder(buffer, {
     name: "captcha.png",
