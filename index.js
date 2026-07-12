@@ -106,7 +106,7 @@ client.on("messageCreate", async (message) => {
   if (!message.member.roles.cache.has(process.env.VERIFY_MANAGER_ROLE_ID)) {
     return;
   }
-  
+
   const embed = new EmbedBuilder()
     .setTitle("認証")
     .setDescription(
@@ -133,12 +133,15 @@ client.on("interactionCreate", async (interaction) => {
   if (interaction.customId !== "verify") return;
   const answer = crypto.randomBytes(3).toString("hex").toUpperCase();
   const captcha = new Captcha();
+
+  captcha.async = true;
   captcha.width = 300;
   captcha.height = 100;
-  captcha.text = answer;
-  captcha.async = true;
+
   captcha.addDecoy();
   captcha.drawTrace();
+
+  await captcha.addText(answer);
   const buffer = await captcha.png;
   const attachment = new AttachmentBuilder(buffer, {
     name: "captcha.png",
