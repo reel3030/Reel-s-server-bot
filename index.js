@@ -97,13 +97,16 @@ client.on("guildMemberAdd", async (member) => {
 });
 
 client.on("messageCreate", async (message) => {
+  console.log(message.content);
+
   if (message.author.bot) return;
 
-  //if (message.content !== "rsbot!verify") return;
-  //if (!message.member.roles.cache.has(process.env.VERIFY_MANAGER_ROLE_ID)) {
-  //  return;
-//  }
+  if (message.content !== "rsbot!verify") return;
 
+  if (!message.member.roles.cache.has(process.env.VERIFY_MANAGER_ROLE_ID)) {
+    return;
+  }
+  
   const embed = new EmbedBuilder()
     .setTitle("認証")
     .setDescription(
