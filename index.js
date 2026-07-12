@@ -228,7 +228,7 @@ client.on("interactionCreate", async (interaction) => {
       files: [attachment],
       components: [answerRow],
     });
-  });
+  }
 });
 
 client.login(process.env.TOKEN);
