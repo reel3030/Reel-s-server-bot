@@ -193,6 +193,15 @@ client.on("interactionCreate", async (interaction) => {
 
     if (interaction.customId !== "verify") return;
 
+    const member = await interaction.guild.members.fetch(interaction.user.id);
+
+    if (member.roles.cache.has(process.env.TARGET_ROLE_ID)) {
+      await interaction.reply({
+        content: "あなたは既に認証済みです。 / you are already verified.",
+        ephemeral: true,
+      });
+      return;
+    }
     await interaction.deferReply({
       ephemeral: true,
     });
