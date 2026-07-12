@@ -147,7 +147,9 @@ client.on("interactionCreate", async (interaction) => {
     .setStyle(ButtonStyle.Primary);
 
   const answerRow = new ActionRowBuilder().addComponents(answerButton);
+
   captchas.set(interaction.user.id, answer);
+
   await interaction.reply({
     content: "画像に表示されている文字を入力してください。",
     files: [attachment],
