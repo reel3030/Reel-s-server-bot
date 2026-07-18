@@ -72,7 +72,8 @@ client.once("clientReady", async () => {
 client.on("guildMemberAdd", async (member) => {
   console.log(`${member.user.tag} が参加しました`);
 
-  const threeDays = 1000 * 60 * 60 * 24 * 3;
+  const verifyDays = 7;
+  const verifyTime = 1000 * 60 * 60 * 24 * verifyDays;
 
   setTimeout(async () => {
     try {
@@ -84,13 +85,13 @@ client.on("guildMemberAdd", async (member) => {
 
       try {
         await freshMember.send(
-          "3日以内に認証ロールが付与されなかったため、サーバーから退出となりました。",
+          "7日以内に認証ロールが付与されなかったため、サーバーから退出となりました。",
         );
       } catch {
         console.log(`${freshMember.user.tag} にDMを送信できませんでした。`);
       }
 
-      await freshMember.kick("3日以内に認証ロールが付与されなかったため");
+      await freshMember.kick("7日以内に認証ロールが付与されなかったため");
 
       console.log(`${freshMember.user.tag} をKickしました。`);
     } catch (err) {
