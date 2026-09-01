@@ -206,9 +206,10 @@ client.on("interactionCreate", async (interaction) => {
       });
       return;
     }
+
     await interaction.deferReply({
-      ephemeral: true,
-    });
+　　  flags: MessageFlags.Ephemeral,
+　　　});
 
     const answer = crypto.randomBytes(3).toString("hex").toUpperCase();
 
